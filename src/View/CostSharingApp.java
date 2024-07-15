@@ -3,11 +3,14 @@ package View;
 import Controller.CostSharingController;
 import Model.Person;
 import Model.Purchase;
+import Util.FileWriteHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * The main application window for the cost sharing application.
@@ -57,6 +60,10 @@ public class CostSharingApp extends JFrame {
         JButton calculateButton = new JButton("Calculate");
         calculateButton.addActionListener(new CalculateButtonListener());
         inputPanel.add(calculateButton);
+
+        JButton finallyButton = new JButton("Finally");
+        finallyButton.addActionListener(new FinallyButtonListener());
+        inputPanel.add(finallyButton);
 
         purchasesListArea = new JTextArea(10, 30);
         purchasesListArea.setEditable(false);
@@ -130,9 +137,47 @@ public class CostSharingApp extends JFrame {
     }
 
     /**
+     * Action listener for the finally button.
+     */
+    private class FinallyButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String filePath = "cost_sharing_data.txt";
+
+            try {
+                StringBuilder content = new StringBuilder();
+                content.append("List of Purchases:\n");
+                List<Purchase> purchases = controller.getPurchases();
+                for (Purchase purchase : purchases) {
+                    content.append(purchase.toString()).append("\n");
+                }
+                content.append("\nCost Sharing Result:\n");
+                content.append(controller.calculateCosts());
+
+                FileWriteHelper.writeToFile(filePath, content.toString());
+
+                JOptionPane.showMessageDialog(null, "Data saved to file: " + filePath);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error occurred while saving data: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Shows the application window.
      */
     public void showApp() {
         SwingUtilities.invokeLater(() -> setVisible(true));
+    }
+
+    /**
+     * Main method to start the application.
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        CostSharingApp app = new CostSharingApp();
+        app.showApp();
     }
 }

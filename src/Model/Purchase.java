@@ -1,4 +1,5 @@
 package Model;
+
 /**
  * Represents a purchase made by a person.
  */
