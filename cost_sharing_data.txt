@@ -1,0 +1,13 @@
+List of Purchases:
+nik: $3.56
+nik: $122.0
+nak: $0.999
+nak: $23.0
+
+Cost Sharing Result:
+Total cost: $149.56
+Cost per person: $49.85
+
+Payment instructions:
+nuk should pay nik $49.85
+nak should pay nik $25.85
